@@ -156,11 +156,12 @@ background: #00b4cc;
 					<?php 
 						
 						
-						//if($_SESSION['user'] !=''){
+						if($_SESSION['user'] !=''){
 							include('/models/admin/menu.php');
 							$oData = new menu();
-							$oData->getmenu(0,1);	
-						//}							
+							$oData->getmenu(0,1);
+							$oData = NULL;
+						}							
 					?>
 					</div>
 				</div>
@@ -175,9 +176,9 @@ background: #00b4cc;
     <div>
     	<?php 
     	
-    		//if($_SESSION['user'] == ''){
-			//	include('/login.php');
-			//}
+    		if($_SESSION['user'] == ''){
+				include('/login.php');
+			}
     	?>
     </div>
 	</body>

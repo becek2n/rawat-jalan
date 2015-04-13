@@ -17,6 +17,7 @@
 					</td>
 					<td>
 						<input type="text" id="m_oTbGroupName" maxlength="30" value="<?php echo base64_decode($_GET[base64_encode('groupname')]) ?>"/>
+						<input type="hidden" id="m_oHfIDGroup" name="m_oHfIDGroup" value="<?php echo base64_decode($_GET[base64_encode('ref')]) ?>" />
 					</td>
 				</tr>
 				<tr>
@@ -41,7 +42,6 @@
 				<tr></tr>
 				<tr>
 					<td colspan="2">
-
 						<table class="table table-hover table-bordered">
 							<tr>
 								<td>
@@ -74,12 +74,17 @@
 			
 		</td>
 		<td>
+			
 			<div id='jqxWidget'>
 				<div style='float: left;'>
 			        <div id='jqxTree' style='visibility: hidden; float: left; margin-left: 20px;'>
 						<?php 
+							//include('../../../models/admin/menu.php');
+							$oDaMenu = new menu();
 							
-							$oData->gettreeviewcheckbox(0,$id);
+							$oDaMenu->gettreeviewcheckbox(0,$id);
+							
+							$oDaMenu = NULL;
 						?>
 					</div>
 			</div>

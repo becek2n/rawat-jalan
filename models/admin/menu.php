@@ -1,18 +1,17 @@
 <?php
-include('/db/dbconnection.php');
+include_once('/db/dbconnection.php');
 class menu{
 	
 	private $oService;
 	
 	public function __construct()	{		
-		$obj = new dbconnection();
-		$this->oService = $obj->opendb();
-		//$this->dbh = new PDO("mysql:host=".$host.";dbname=".$db,$user,$pass);		
 		
 	}
 	
 	function getmenu($parent, $level){
-			
+		
+		$oconn = new dbconnection();
+		$this->oService = $oconn->opendb();	
 		try{
 
 			$execute = $this->oService->prepare("SELECT a.idmenu, a.mnname, a.mnlink, Deriv1.Count FROM refmenu a  LEFT OUTER JOIN (SELECT parenid, COUNT(*) AS Count FROM refmenu GROUP BY parenid) Deriv1 ON a.idmenu = Deriv1.parenid WHERE a.parenid=".$parent);
@@ -32,13 +31,14 @@ class menu{
 			echo('srj.models.menu.getmenu : '.$ex);
 		}
 		$oService = null;
+		$oconn = null;
 		echo '</ul>';
 	//getmenu(0, 1);
 	}
 	
 	function gettreeviewcheckbox($parent, $groupid){
-		//$oService = new dbconnection();
-		//$obj = $oService->opendb();
+		$oconn = new dbconnection();
+		$this->oService = $oconn->opendb();	
 		
 		try{
 			$sql ='';
@@ -71,7 +71,7 @@ class menu{
 		        }
 			}
 		$oService = null;
-		$obj = null;
+		$oconn = null;
 		} catch (Exception $ex) {
 			echo('srj.models.menu.gettreeviewcheckbox : '.$ex);
 		}

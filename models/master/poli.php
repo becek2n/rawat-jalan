@@ -18,7 +18,7 @@ class Poli {
 				$start = ($page - 1) * $limit;
 			}
 			
-			$sqlcount = ;
+			$sqlcount = '';
 		}catch(Exception $ex){
 			echo 'srj.models.poli.getdata : ' . $ex;
 		}

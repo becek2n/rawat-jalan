@@ -4,15 +4,13 @@ class group{
 	private $oService;
 	
 	public function __construct()	{		
-		//$obj = new dbconnection();
-		//$this->oService = $obj->opendb();
-		//$this->dbh = new PDO("mysql:host=".$host.";dbname=".$db,$user,$pass);		
+
 	}
 	
 	function getdata($id){
-		
-		$obj = new dbconnection();
-		$this->oService = $obj->opendb();
+		//include('./db/dbconnection.php');
+		$objconn = new dbconnection();
+		$this->oService = $objconn->opendb();
 		try{
 			if ($id == 0){
 				$sql = 'select * from refgroup';	
@@ -23,7 +21,6 @@ class group{
 			
 			$exec = $this->oService->prepare($sql);
 			$exec->execute();
-			$this->oService = null;
 			$table = '';
 			while($row = $exec->fetch(PDO::FETCH_ASSOC)){
 				$table .= "<tr>";
@@ -32,17 +29,32 @@ class group{
 			}
 			
 			$this->oService = null;
+			$objconn = NULL;
 			return $table;
 		} catch (Exception $ex) {
 			echo 'srj.models.user.getdata : ' .$ex;
 		}
 	}
 	
-	function save($data){
-		//include('../db/dbconnection.php');
-		
+	function save($idgroup, $datagroup){
+		include_once('../../db/dbconnection.php');
+		$objconn= new dbconnection();
+		$this->oService = $objconn->opendb();
 		try{
-			
+			foreach($idgroup as $rows){
+				//check table role, if result null then insert to table else if result grather than 0 next looping
+				$sqlcheck = 'select * from refrole where idgroup ='. $datagroup['id'].' and idmenu = '.$rows;
+				$data = $this->oService->prepare($sqlcheck);
+				$data->execute();
+				$hasil = $data->rowCount();
+				if ($data->rowCount() == 0){
+					$sth = $this->oService->prepare("insert into refrole (idgroup, idmenu, datecreate, createby) VALUES (?, ?, ?, ?)");
+					$sth->execute(array($datagroup['id'], $rows, time(), $datagroup['user']));
+				}
+			}
+		$objconn = null;
+		$this->oService = null;
+		return json_encode('Data successfully save');
 		} catch (Exception $ex) {
 			echo 'srj.models.group.save : ' . $ex;	
 		}
