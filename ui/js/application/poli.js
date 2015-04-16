@@ -1,0 +1,103 @@
+var currentPage;
+$(document).ready(function(){
+	getdata(1);
+	$(document).on('click', 'button#m_oBtnNew', function(){ adddata();});	
+	$(document).on('click', 'a.delete_confirm', function() { deleteConfirmation(this); });
+	$(document).on('click', 'button.delete', function(){ Add(); });
+	$(document).on('click', 'button#m_oBtnNo', function(){ getdata(currentPage); })
+	$(document).on('change', 'select#m_oDdlPageSize', function(){ getdata(currentPage); })
+	$('#divcontent').on('click','.page-numbers',function(){ 
+		$page = $(this).attr('href');
+		$pageind = $page.indexOf('page=');
+	   	$page = $page.substring(($pageind+5));
+	   	getdata($page);
+	   	return false;
+	});
+})
+
+function adddata() {	
+	$("div#adddata").modal("show");
+}
+
+function deleteConfirmation(othis) {	
+	$("div#delete_confirm_modal").modal("show");
+	$("#delete_confirm_modal input#id").val($(othis).attr('idpoli'));
+}
+
+function getdata(iPage){
+	currentPage = iPage;
+	$.ajax({
+	     url:"controller/master/policontroller.php",
+                  type:"POST",
+                  data:"action=getdata&page=" + iPage + "&valuesearch=" + SearchTerm() + "&pagesize=" + PageSize(),
+        cache: false,
+        success: function(response){
+		   
+		  $('#divcontent').html(response);
+		 
+		}
+		
+	});
+	return false;
+}
+
+function PageSize(){
+	return jQuery.trim($("[id*=m_oDdlPageSize]").val());
+}
+
+function SearchTerm() {
+	return jQuery.trim($("[id*=m_oTbSearch]").val());
+}
+
+function MsgChild(msg)
+{
+	document.getElementById('m_oLblMsgChild').innerHTML = msg;
+}
+
+function Add()
+{
+	
+	var Poli = new Object();
+	Poli.PoliName = $('input#m_oTbNama').val();
+	Poli.User = $('input#m_oHfField').val();
+	
+	var poliJson = JSON.stringify(Poli);
+	
+	$.post('controller/master/policontroller.php',
+		{
+			action: 'add',
+			datajson: poliJson
+		},
+		function(textStatus) {
+			if (textStatus == 'success')
+			{
+				alert('Data successfully save');
+			}
+			else
+			{
+				alert(textStatus);
+			}
+		}, 
+		"json"		
+	);
+}
+
+function deleteUser(element) {	
+	
+	var User = new Object();
+	User.id = $("#delete_confirm_modal input#user_id").val();
+	
+	var userJson = JSON.stringify(User);
+	
+	$.post('controller/user.php',
+		{
+			action: 'delete_user',
+			user: userJson
+		},
+		function(data, textStatus) {
+			getUserList(element);
+			$("#delete_confirm_modal").modal("hide");
+		}, 
+		"json"		
+	);	
+}

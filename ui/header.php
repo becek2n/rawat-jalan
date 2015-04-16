@@ -142,7 +142,7 @@ background: #00b4cc;
                         <h1>
                             Rawat Jalan Interface
                         </h1>
-                        <label id="m_oTbLogin" style="color: #ffffff"> Logon as <strong> <?php echo $_SESSION['user']; ?> </strong></label>
+                        <label id="m_oTbLogin" style="color: #ffffff"> Logon as <strong> <?php echo isset($_SESSION['user']); ?> </strong></label>
                     </div>
                     <div class="loginDisplay">
                         LOGO HERE
@@ -155,10 +155,10 @@ background: #00b4cc;
 					<?php 
 						
 						
-						if($_SESSION['user'] !=''){
+						if(isset($_SESSION['user']) !=''){
 							include('/models/admin/menu.php');
 							$oMenu = new menu();
-							$oMenu->getmenu(0,1, $_SESSION['idgroup']);
+							$oMenu->getmenu(0,1, isset($_SESSION['idgroup']));
 							$oMenu = NULL;
 						}							
 					?>
@@ -175,7 +175,7 @@ background: #00b4cc;
     <div>
     	<?php 
     	
-    		if($_SESSION['user'] == ''){
+    		if(isset($_SESSION['user']) == ''){
 				include('/login.php');
 			}
     	?>

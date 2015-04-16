@@ -48,7 +48,7 @@
 			<tr>
 				<td colspan="3" align="center">
 					<label id="m_oLblMsgChild" style="color: red"></label>
-					<input type="hidden" id="m_oHfField" value="<?php echo $_SESSION['user']; ?>"></input>
+					<input type="hidden" id="m_oHfField" value="<?php echo isset($_SESSION['user']); ?>"></input>
 				</td>
 			</tr>
 		</table>
