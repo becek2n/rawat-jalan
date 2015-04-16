@@ -22,7 +22,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" align="center">
-						<form id="frm" method="post" action="index.php?page=menu">
+						<form id="frm" method="post" action="index.php?page=group">
 						<button type="button" id="m_oBtnSave" name="m_oBtnSave" class="btn btn-primary">
 							<i class="icon-ok icon-white"></i>
 							 Save
@@ -98,8 +98,6 @@
 		</td>
 	</tr>
 </table>
-
-<input type="button" value="testing"/>
 <script src="ui/js/application/group.js" ></script>
 <script type="text/javascript">
         $(document).ready(function () {

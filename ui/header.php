@@ -14,8 +14,7 @@
 		<!-- jqwidgets -->
 		
 		<link rel="stylesheet" href="./ui/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
-    	<!--<script type="text/javascript" src="./ui/assets/jqwidgets/scripts/jquery-1.11.1.min.js"></script>
-	     <script type="text/javascript" src="/uiassets/jqwidgets/scripts/demos.js"></script> -->
+    	<!--<script type="text/javascript" src="./ui/assets/jqwidgets/scripts/jquery-1.11.1.min.js"></script>-->
 	    <script type="text/javascript" src="./ui/assets/jqwidgets/jqxcore.js"></script>
 	    <script type="text/javascript" src="./ui/assets/jqwidgets/jqxmenu.js"></script>
 	    <script type="text/javascript" src="./ui/assets/jqwidgets/jqxbuttons.js"></script>
@@ -114,7 +113,7 @@ background: #00b4cc;
     font-size: 1.1em;
     display: block;
     text-align: right;
-    padding: 20px;
+    padding: 31px;
     color: White;
 }
 .loginDisplay a:link
@@ -143,7 +142,7 @@ background: #00b4cc;
                         <h1>
                             Rawat Jalan Interface
                         </h1>
-
+                        <label id="m_oTbLogin" style="color: #ffffff"> Logon as <strong> <?php echo $_SESSION['user']; ?> </strong></label>
                     </div>
                     <div class="loginDisplay">
                         LOGO HERE
@@ -158,9 +157,9 @@ background: #00b4cc;
 						
 						if($_SESSION['user'] !=''){
 							include('/models/admin/menu.php');
-							$oData = new menu();
-							$oData->getmenu(0,1);
-							$oData = NULL;
+							$oMenu = new menu();
+							$oMenu->getmenu(0,1, $_SESSION['idgroup']);
+							$oMenu = NULL;
 						}							
 					?>
 					</div>

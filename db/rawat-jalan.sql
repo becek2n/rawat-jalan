@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Waktu pembuatan: 10. April 2015 jam 10:43
+-- Waktu pembuatan: 16. April 2015 jam 18:35
 -- Versi Server: 5.1.41
 -- Versi PHP: 5.3.1
 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `refmenu` (
   `mnlink` varchar(100) NOT NULL,
   `parenid` int(11) NOT NULL,
   PRIMARY KEY (`idmenu`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
 --
 -- Dumping data untuk tabel `refmenu`
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `refmenu` (
 
 INSERT INTO `refmenu` (`idmenu`, `mnname`, `mnlink`, `parenid`) VALUES
 (1, 'Home', '#home', 0),
-(2, 'Logout', '#', 1),
+(2, 'Logout', 'index.php?page=logout', 1),
 (3, 'Data', '#', 0),
 (4, 'Registration', 'index.php?page=pasien', 3),
 (5, 'Pembayaran', 'index.php?page=menu', 3),
@@ -94,7 +94,11 @@ INSERT INTO `refmenu` (`idmenu`, `mnname`, `mnlink`, `parenid`) VALUES
 (12, 'Transaksi', '#', 10),
 (13, 'Audit Trial', '#', 10),
 (14, 'Master Data', '#', 0),
-(15, 'Poli', 'index.php?page=poli', 14);
+(15, 'Poli', 'index.php?page=poli', 14),
+(16, 'Administrator', '#', 0),
+(17, 'Group', 'index.php?page=group', 16),
+(18, 'User', 'index.php?page=user', 16),
+(19, 'Dokter', 'index.php?page=dokter', 14);
 
 -- --------------------------------------------------------
 
@@ -144,15 +148,18 @@ CREATE TABLE IF NOT EXISTS `refpoli` (
   `datemodified` datetime NOT NULL,
   `modifiedby` varchar(30) NOT NULL,
   PRIMARY KEY (`idpoli`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data untuk tabel `refpoli`
 --
 
 INSERT INTO `refpoli` (`idpoli`, `namapoli`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
+(6, 'aaa', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', ''),
+(5, 'aaa', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', ''),
 (3, 'Mata', '2015-04-01 22:01:48', '', '2015-04-01 22:01:52', ''),
-(4, 'Gigi', '2015-04-01 22:01:57', '', '2015-04-01 22:02:00', '');
+(4, 'Gigi', '2015-04-01 22:01:57', '', '2015-04-01 22:02:00', ''),
+(7, 'xx', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', '');
 
 -- --------------------------------------------------------
 
@@ -169,16 +176,32 @@ CREATE TABLE IF NOT EXISTS `refrole` (
   `datemodified` datetime DEFAULT NULL,
   `modifiedby` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idrole`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data untuk tabel `refrole`
 --
 
 INSERT INTO `refrole` (`idrole`, `idgroup`, `idmenu`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
-(5, 2, 3, NULL, NULL, NULL, NULL),
+(10, 1, 1, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(9, 2, 3, '0000-00-00 00:00:00', 'admin', NULL, NULL),
 (3, 2, 1, '2015-04-03 22:02:11', 'djanuar', NULL, NULL),
-(4, 2, 2, '2015-04-03 22:02:19', 'djanuar', NULL, NULL);
+(4, 2, 2, '2015-04-03 22:02:19', 'djanuar', NULL, NULL),
+(8, 2, 4, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(11, 1, 2, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(12, 1, 3, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(13, 1, 4, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(14, 1, 5, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(15, 1, 6, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(16, 1, 7, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(17, 1, 10, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(18, 1, 12, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(19, 1, 13, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(20, 1, 14, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(21, 1, 15, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(22, 1, 16, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(23, 1, 17, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(24, 1, 18, '0000-00-00 00:00:00', 'admin', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -192,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `refuser` (
   `username` varchar(15) NOT NULL,
   `fullname` varchar(50) NOT NULL,
   `password` varchar(200) NOT NULL,
-  `isactive` bit(1) NOT NULL,
+  `isactive` int(1) NOT NULL,
   `lastlogon` datetime DEFAULT NULL,
   `lastlogoff` datetime DEFAULT NULL,
   `datecreate` datetime DEFAULT NULL,
@@ -200,17 +223,15 @@ CREATE TABLE IF NOT EXISTS `refuser` (
   `datemodified` datetime DEFAULT NULL,
   `modifiedby` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`iduser`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data untuk tabel `refuser`
 --
 
 INSERT INTO `refuser` (`iduser`, `idgroup`, `username`, `fullname`, `password`, `isactive`, `lastlogon`, `lastlogoff`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
-(1, 2, 'djanuar', 'djanuar aransyah', '123', b'1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', ''),
-(2, 2, 'djanuar', 'djanuar aransyah', '123', b'1', NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 2, 'aransyah', 'aransyah', '321', b'1', NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 1, 'tes', 'testing', 'tes', b'0', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 1, 'admin', 'djanuar aransyah', 'admin', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', ''),
+(3, 2, 'aransyah', 'aransyah', '321', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

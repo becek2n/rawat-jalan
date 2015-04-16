@@ -49,9 +49,9 @@
 </table>
 Page Size
 <select name="m_oDdlPageSize" id="m_oDdlPageSize" class="input-small" onchange="listdata()">
-	<option value="1">10</option>
-	<option value="2">50</option>
-	<option value="3">100</option>
+	<option value="10">10</option>
+	<option value="50">50</option>
+	<option value="100">100</option>
 </select>
 <div id="divcontent"></div>
 

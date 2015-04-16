@@ -13,7 +13,7 @@ if ($_GET['pageindex'] == '' or $_GET['pageindex'] != ''){
 		$pageindex= $pageindex;
 	}
 
-	echo $oDaUser->getdata($pageindex, 3, 3, 'index.php?page=menu', $id);
+	echo $oDaUser->getdata($pageindex, 3, 3, 'index.php?page=group', $id);
 	$oDaUser = null;
 		
 }

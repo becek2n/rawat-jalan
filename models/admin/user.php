@@ -1,17 +1,28 @@
 <?php
 session_start();
-class user{
+include_once('group.php');
+class user extends group
+{
 	private $oService;
 	
-	private $IDGroup, $UserName, $FullName, $Password, $IsActive, $LastLogon, $LastLogoff, $CreateBy, $MsgErr;
+	private $IDUser, $GroupID, $UserName, $FullName, $Password, $IsActive, $LastLogon, $LastLogoff, $CreateBy, $MsgErr;
 	
-	public function _getIDGroup()
+	public function _getIDUser()
 	{
-		return $this->IDGroup;
+		return $this->IDUser;
 	}
-	public function _setIDGroup($iIdGroup)
+	public function _setIDUser($iIDUser)
 	{
-		$this->IDGroup = $iIdGroup;
+		$this->IDUser = $iIDUser;
+	}
+	
+	public function _getGroupID()
+	{
+		return $this->GroupID;
+	}
+	public function _setGroupID($iGroupID)
+	{
+		$this->GroupID = $iGroupID;
 	}
 	
 	public function _getUserName()
@@ -118,13 +129,13 @@ class user{
 			$sqlgetdata = '';
 			if ($idgroup == '')
 			{
-				$sqlcount .= 'select * from refuser';
-				$sqlgetdata = "select *, case when isactive = 0 then 'non active' else 'active' end as status from refuser order by iduser asc limit $start,$limit";
+				$sqlcount .= 'select g.idgroup, g.namagroup, u.username, u.fullname from refuser u inner join refgroup g on g.idgroup = u.idgroup';
+				$sqlgetdata = "select g.idgroup, g.namagroup, u.username, u.fullname, case when isactive = 0 then 'non active' else 'active' end as status  from refuser u inner join refgroup g on g.idgroup = u.idgroup order by iduser asc limit $start,$limit";
 			}
 			else
 			{
-				$sqlcount .= 'select * from refuser where idgroup = '.$idgroup;
-				$sqlgetdata = "select *, case when isactive = 0 then 'non active' else 'active' end as status from refuser where idgroup = $idgroup order by iduser asc limit $start,$limit";
+				$sqlcount .= 'select g.idgroup, g.namagroup, u.username, u.fullname from refuser u inner join refgroup g on g.idgroup = u.idgroup where u.idgroup = '.$idgroup;
+				$sqlgetdata = "select g.idgroup, g.namagroup, u.username, u.fullname, case when isactive = 0 then 'non active' else 'active' end as status  from refuser u inner join refgroup g on g.idgroup = u.idgroup where u.idgroup = $idgroup order by iduser asc limit $start,$limit";
 			}
 			$sth = $this->oService->prepare($sqlcount);
 			$sth->execute();
@@ -139,8 +150,85 @@ class user{
 			{
 
 			while ($row = $data->fetch(PDO::FETCH_ASSOC)){
-				$str.="<tr><td>".$row['username']."</td><td>".$row['fullname']."</td><td>".$row['idgroup']."</td>";
+				$str.="<tr><td>".$row['username']."</td><td>".$row['fullname']."</td><td>".$row['namagroup']."</td>";
 				$str.="<td>".$row['status']."</td></tr>";
+			}
+
+			}
+			else
+			{
+				$str .= "<tr><td colspan='4' align='center'>No Data Available</td></tr>";
+			}
+			$str.='</tbody></table>';
+
+			echo $str; 
+			pagination($limit,$adjacent,$rowscount,$page, $link);  
+			$sth = null;
+			$objconn = NULL;
+			$this->oService = null;
+		} 
+		catch (Exception $ex) 
+		{
+			echo 'srj.models.user.getdata : ' . $ex;
+		}		
+	}
+	
+	public function ListUser($pageindex, $limit, $adjacent, $link, $idgroup)
+	{
+		include_once('/db/dbconnection.php');
+		$objconn = new dbconnection();
+		include_once('/global/pagingpostback.php');
+		
+		$this->oService = $objconn->opendb();
+		try
+		{
+			if ($pageindex == '')
+			{
+				$pageindex = 1;
+			}
+			else
+			{
+				$pageindex = $pageindex;
+			}
+
+			$page = $pageindex;
+			if($page==1)
+			{
+			$start = 0;  
+			}
+			else
+			{
+			$start = ($page-1)*$limit;
+			}
+			$sqlcount = ''; 
+			$sqlgetdata = '';
+			if ($idgroup == '')
+			{
+				$sqlcount .= 'select g.idgroup, g.namagroup, u.username, u.fullname from refuser u inner join refgroup g on g.idgroup = u.idgroup';
+				$sqlgetdata = "select g.idgroup, g.namagroup, u.iduser, u.username, u.fullname, case when isactive = 0 then 'non active' else 'active' end as status  from refuser u inner join refgroup g on g.idgroup = u.idgroup order by iduser asc limit $start,$limit";
+			}
+			else
+			{
+				$sqlcount .= 'select g.idgroup, g.namagroup, u.username, u.fullname from refuser u inner join refgroup g on g.idgroup = u.idgroup where u.idgroup = '.$idgroup;
+				$sqlgetdata = "select g.idgroup, g.namagroup, u.iduser, u.username, u.fullname, case when isactive = 0 then 'non active' else 'active' end as status  from refuser u inner join refgroup g on g.idgroup = u.idgroup where u.idgroup = $idgroup order by iduser asc limit $start,$limit";
+			}
+			$sth = $this->oService->prepare($sqlcount);
+			$sth->execute();
+			//$sql = "select * from ajaxpage order by id asc";
+			$rowscount = $sth->rowCount();
+			
+			$data = $this->oService->prepare($sqlgetdata);
+			$data->execute();
+			
+			$str ='<table width="600" cellpadding="5" class="table table-hover table-bordered"><thead><tr><th scope="col">User Name</th><th scope="col">Full Name</th><th scope="col">Group</th><th scope="col">Status</th><th>Acion</th></tr></thead><tbody>';
+			if($data->rowCount()>0)
+			{
+
+			while ($row = $data->fetch(PDO::FETCH_ASSOC)){
+				$str.="<tr><td>".$row['username']."</td><td>".$row['fullname']."</td><td>".$row['namagroup']."</td>";
+				$str.="<td>".$row['status']."</td>";
+				$str.='<td><a href="index.php?page=user&'.base64_encode('delete'). '='.base64_encode($row['iduser']).'" class="delete_confirm btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+		  		$str.='</tr>';
 			}
 
 			}
@@ -181,6 +269,7 @@ class user{
 		  	$this->_setIsActive($getrow['isactive']);
 		  	$this->_setLastLogon($getrow['lastlogon']);
 		  	$this->_setLastLogoff($getrow['lastlogoff']);
+		  	$this->_setGroupID($getrow['idgroup']);
 		  	
 		  	//if count result not equal 0 then check user active
 			if ($result != 0)
@@ -190,6 +279,7 @@ class user{
 					$_SESSION['user'] = $this->_getUserName();
 					$_SESSION['lastlogon'] = $this->_getLastLogon();
 					$_SESSION['lastlogoff'] = $this->_getLastLogoff();
+					$_SESSION['idgroup'] = $this->_getGroupID();
 					echo "<script>document.location= 'index.php';</script>";
 					exit();
 				}
@@ -213,6 +303,46 @@ class user{
 		catch(Exception $ex)
 		{
 			echo 'srj.models.login.login : ' . $ex->getMessage();
+		}
+	}
+	
+	public function Add()
+	{
+		include_once('/db/dbconnection.php');
+		$oConn = new dbconnection();
+		$this->oService = $oConn->opendb();
+		
+		$sql = 'insert into refuser (idgroup, username, fullname, password, isactive) values(?, ?, ?, ?, ?)';
+		
+		
+		//parameter values stored in array
+		$param = array(
+			$this->_getGroupID(),
+			$this->_getUserName(),
+			$this->_getFullName(),
+			$this->_getPassword(),
+			1
+		);
+		$execute = $this->oService->prepare($sql);
+		return $execute->execute($param);
+	}
+	
+	public function DeleteById()
+	{
+		include_once('/db/dbconnection.php');
+		$oConn = new dbconnection();
+		$this->oService = $oConn->opendb();
+		
+		try
+		{
+			$sql = 'delete from refuser where iduser = ?';
+			$param = array($this->_getIDUser());
+			$execute = $this->oService->prepare($sql);
+			return $execute->execute($param);
+		}
+		catch(Exception $ex)
+		{
+			$this->_setMsgErr($ex);
 		}
 	}
 }

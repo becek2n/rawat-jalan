@@ -4,24 +4,21 @@ class menu{
 	
 	private $oService;
 	
-	public function __construct()	{		
-		
-	}
 	
-	function getmenu($parent, $level){
+	function getmenu($parent, $level, $IDGroup){
 		
 		$oconn = new dbconnection();
 		$this->oService = $oconn->opendb();	
 		try{
 
-			$execute = $this->oService->prepare("SELECT a.idmenu, a.mnname, a.mnlink, Deriv1.Count FROM refmenu a  LEFT OUTER JOIN (SELECT parenid, COUNT(*) AS Count FROM refmenu GROUP BY parenid) Deriv1 ON a.idmenu = Deriv1.parenid WHERE a.parenid=".$parent);
+			$execute = $this->oService->prepare("SELECT a.idmenu, a.mnname, a.mnlink, Deriv1.Count FROM refmenu a  LEFT OUTER JOIN (SELECT parenid, COUNT(*) AS Count FROM refmenu GROUP BY parenid) Deriv1 ON a.idmenu = Deriv1.parenid inner join refrole r on r.idmenu = a.idmenu WHERE a.parenid=".$parent." and r.idgroup =".$IDGroup." order by a.idmenu asc");
 			$execute->execute();
 			
 			echo '<ul>';
 			while ($row = $execute->fetch(PDO::FETCH_ASSOC)){
 				if ($row['Count'] > 0) {
 		            echo "<li><a href='" . $row['mnlink'] . "'>" . $row['mnname'] . "</a>";
-		             $this->getmenu($row['idmenu'], $level + 1);
+		             $this->getmenu($row['idmenu'], $level + 1, $IDGroup);
 		            echo "</li>";
 		        } elseif ($row['Count']==0) {
 		            echo "<li><a href='" . $row['mnlink'] . "'>" . $row['mnname'] . "</a></li>";

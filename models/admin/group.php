@@ -3,8 +3,38 @@
 class group{
 	private $oService;
 	
-	public function __construct()	{		
-
+	private $IdGroup;
+	private $GroupName;
+	private $User;
+	
+	public function _getID()
+	{
+		$this->IdGroup;
+	}
+	
+	public function _setID($ID)
+	{
+		$this->IdGroup = $ID;
+	}
+	
+	public function _getGroupName()
+	{
+		$this->GroupName;
+	}
+	
+	public function _setGroupName($sGroupName)
+	{
+		$this->GroupName= $sGroupName;
+	}
+	
+	public function _getUser()
+	{
+		$this->User;
+	}
+	
+	public function _setUser($sUser)
+	{
+		$this->User = $sUser;
 	}
 	
 	function getdata($id){
@@ -24,7 +54,7 @@ class group{
 			$table = '';
 			while($row = $exec->fetch(PDO::FETCH_ASSOC)){
 				$table .= "<tr>";
-				$table .= '<td>'.$row['idgroup'].'</td><td><a href="index.php?page=menu&'. base64_encode('ref') . '='. base64_encode($row['idgroup']).'&'. base64_encode('groupname') . '=' . base64_encode($row['namagroup']).'">'.$row['namagroup'].'</a></td>';
+				$table .= '<td>'.$row['idgroup'].'</td><td><a href="index.php?page=group&'. base64_encode('ref') . '='. base64_encode($row['idgroup']).'&'. base64_encode('groupname') . '=' . base64_encode($row['namagroup']).'">'.$row['namagroup'].'</a></td>';
 				$table .= '</tr>';
 			}
 			
@@ -57,6 +87,32 @@ class group{
 		return json_encode('Data successfully save');
 		} catch (Exception $ex) {
 			echo 'srj.models.group.save : ' . $ex;	
+		}
+	}
+	
+	public function GetGroup()
+	{
+		try
+		{
+			include_once('/db/dbconnection.php');
+			$oConn = new dbconnection();
+			$this->oService = $oConn->opendb();	
+			
+			$sql = 'select idgroup, namagroup from refgroup ';
+			
+			$execute = $this->oService->prepare($sql);
+			$execute->execute();
+			$html = '';
+			while($data = $execute->fetch(PDO::FETCH_ASSOC))
+			{
+				$html .= '<option value="'.$data["idgroup"].'">' .$data['namagroup']. '</option>';
+			}
+			
+			return $html;
+		} 
+		catch (Exception $ex) 
+		{
+			
 		}
 	}
 }
