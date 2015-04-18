@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Waktu pembuatan: 16. April 2015 jam 18:35
--- Versi Server: 5.1.41
--- Versi PHP: 5.3.1
+-- Generation Time: Apr 18, 2015 at 04:50 PM
+-- Server version: 5.1.41
+-- PHP Version: 5.3.1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -22,7 +22,41 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `datcheckup`
+-- Table structure for table `dataudittrail`
+--
+
+CREATE TABLE IF NOT EXISTS `dataudittrail` (
+  `idaudit` int(11) NOT NULL AUTO_INCREMENT,
+  `tablename` varchar(30) NOT NULL,
+  `action` varchar(30) NOT NULL,
+  `objfield` text NOT NULL,
+  `datecreate` datetime NOT NULL,
+  `createby` varchar(30) NOT NULL,
+  PRIMARY KEY (`idaudit`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=36 ;
+
+--
+-- Dumping data for table `dataudittrail`
+--
+
+INSERT INTO `dataudittrail` (`idaudit`, `tablename`, `action`, `objfield`, `datecreate`, `createby`) VALUES
+(29, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(28, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(27, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(26, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(25, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(24, 'Poli', 'Add', 'Nama Poli : xDate Create : Create By : admin', '0000-00-00 00:00:00', 'admin'),
+(30, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(31, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(32, 'Poli', 'Add', 'Nama Poli :  | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(33, 'Poli', 'Add', 'Nama Poli : x | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(34, 'Poli', 'Add', 'Nama Poli : anak | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin'),
+(35, 'Dokter', 'Add', 'Nama Dokter : tes | Date Create :  | Create By : admin | ', '0000-00-00 00:00:00', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `datcheckup`
 --
 
 CREATE TABLE IF NOT EXISTS `datcheckup` (
@@ -38,14 +72,40 @@ CREATE TABLE IF NOT EXISTS `datcheckup` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data untuk tabel `datcheckup`
+-- Dumping data for table `datcheckup`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `refgroup`
+-- Table structure for table `refdokter`
+--
+
+CREATE TABLE IF NOT EXISTS `refdokter` (
+  `iddokter` int(11) NOT NULL AUTO_INCREMENT,
+  `idpoli` int(11) NOT NULL,
+  `namadokter` varchar(35) NOT NULL,
+  `datecreate` datetime NOT NULL,
+  `createby` varchar(30) NOT NULL,
+  `datemodified` datetime NOT NULL,
+  `modifiedby` varchar(30) NOT NULL,
+  PRIMARY KEY (`iddokter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `refdokter`
+--
+
+INSERT INTO `refdokter` (`iddokter`, `idpoli`, `namadokter`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
+(1, 0, 'Dr.Adi', '2015-04-01 13:31:53', 'adi', '2015-04-30 13:32:03', 'adi'),
+(2, 6, 'Dr.Adi', '2015-04-01 13:31:53', 'adi', '2015-04-30 13:32:03', 'adi'),
+(3, 3, 'tes', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `refgroup`
 --
 
 CREATE TABLE IF NOT EXISTS `refgroup` (
@@ -57,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `refgroup` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data untuk tabel `refgroup`
+-- Dumping data for table `refgroup`
 --
 
 INSERT INTO `refgroup` (`idgroup`, `namagroup`, `datecreate`, `createby`) VALUES
@@ -67,7 +127,31 @@ INSERT INTO `refgroup` (`idgroup`, `namagroup`, `datecreate`, `createby`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `refmenu`
+-- Table structure for table `refharikerja`
+--
+
+CREATE TABLE IF NOT EXISTS `refharikerja` (
+  `idharikerja` int(11) NOT NULL AUTO_INCREMENT,
+  `iddokter` int(11) NOT NULL,
+  `harikerja` varchar(10) NOT NULL,
+  `jampraktekfrom` time NOT NULL,
+  `jampraktekto` time NOT NULL,
+  `datecreate` datetime NOT NULL,
+  `createby` varchar(30) NOT NULL,
+  `datemodified` datetime NOT NULL,
+  `modifiedby` varchar(30) NOT NULL,
+  PRIMARY KEY (`idharikerja`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `refharikerja`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `refmenu`
 --
 
 CREATE TABLE IF NOT EXISTS `refmenu` (
@@ -76,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `refmenu` (
   `mnlink` varchar(100) NOT NULL,
   `parenid` int(11) NOT NULL,
   PRIMARY KEY (`idmenu`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
--- Dumping data untuk tabel `refmenu`
+-- Dumping data for table `refmenu`
 --
 
 INSERT INTO `refmenu` (`idmenu`, `mnname`, `mnlink`, `parenid`) VALUES
@@ -92,7 +176,7 @@ INSERT INTO `refmenu` (`idmenu`, `mnname`, `mnlink`, `parenid`) VALUES
 (7, 'Perawatan', '#', 5),
 (10, 'Report', '#', 0),
 (12, 'Transaksi', '#', 10),
-(13, 'Audit Trial', '#', 10),
+(13, 'Audit Trail', '#', 10),
 (14, 'Master Data', '#', 0),
 (15, 'Poli', 'index.php?page=poli', 14),
 (16, 'Administrator', '#', 0),
@@ -103,7 +187,7 @@ INSERT INTO `refmenu` (`idmenu`, `mnname`, `mnlink`, `parenid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `refpasien`
+-- Table structure for table `refpasien`
 --
 
 CREATE TABLE IF NOT EXISTS `refpasien` (
@@ -117,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `refpasien` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
--- Dumping data untuk tabel `refpasien`
+-- Dumping data for table `refpasien`
 --
 
 INSERT INTO `refpasien` (`id`, `nama`, `jeniskelamin`, `alamat`, `agama`, `status`) VALUES
@@ -137,7 +221,7 @@ INSERT INTO `refpasien` (`id`, `nama`, `jeniskelamin`, `alamat`, `agama`, `statu
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `refpoli`
+-- Table structure for table `refpoli`
 --
 
 CREATE TABLE IF NOT EXISTS `refpoli` (
@@ -148,23 +232,22 @@ CREATE TABLE IF NOT EXISTS `refpoli` (
   `datemodified` datetime NOT NULL,
   `modifiedby` varchar(30) NOT NULL,
   PRIMARY KEY (`idpoli`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=70 ;
 
 --
--- Dumping data untuk tabel `refpoli`
+-- Dumping data for table `refpoli`
 --
 
 INSERT INTO `refpoli` (`idpoli`, `namapoli`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
-(6, 'aaa', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', ''),
-(5, 'aaa', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', ''),
 (3, 'Mata', '2015-04-01 22:01:48', '', '2015-04-01 22:01:52', ''),
 (4, 'Gigi', '2015-04-01 22:01:57', '', '2015-04-01 22:02:00', ''),
-(7, 'xx', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', '');
+(68, 'x', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', ''),
+(69, 'anak', '0000-00-00 00:00:00', 'admin', '0000-00-00 00:00:00', '');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `refrole`
+-- Table structure for table `refrole`
 --
 
 CREATE TABLE IF NOT EXISTS `refrole` (
@@ -176,10 +259,10 @@ CREATE TABLE IF NOT EXISTS `refrole` (
   `datemodified` datetime DEFAULT NULL,
   `modifiedby` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idrole`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
--- Dumping data untuk tabel `refrole`
+-- Dumping data for table `refrole`
 --
 
 INSERT INTO `refrole` (`idrole`, `idgroup`, `idmenu`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
@@ -201,12 +284,13 @@ INSERT INTO `refrole` (`idrole`, `idgroup`, `idmenu`, `datecreate`, `createby`, 
 (21, 1, 15, '0000-00-00 00:00:00', 'admin', NULL, NULL),
 (22, 1, 16, '0000-00-00 00:00:00', 'admin', NULL, NULL),
 (23, 1, 17, '0000-00-00 00:00:00', 'admin', NULL, NULL),
-(24, 1, 18, '0000-00-00 00:00:00', 'admin', NULL, NULL);
+(24, 1, 18, '0000-00-00 00:00:00', 'admin', NULL, NULL),
+(25, 1, 19, '0000-00-00 00:00:00', 'admin', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `refuser`
+-- Table structure for table `refuser`
 --
 
 CREATE TABLE IF NOT EXISTS `refuser` (
@@ -226,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `refuser` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
--- Dumping data untuk tabel `refuser`
+-- Dumping data for table `refuser`
 --
 
 INSERT INTO `refuser` (`iduser`, `idgroup`, `username`, `fullname`, `password`, `isactive`, `lastlogon`, `lastlogoff`, `datecreate`, `createby`, `datemodified`, `modifiedby`) VALUES
