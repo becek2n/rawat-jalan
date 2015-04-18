@@ -142,7 +142,10 @@ background: #00b4cc;
                         <h1>
                             Rawat Jalan Interface
                         </h1>
-                        <label id="m_oTbLogin" style="color: #ffffff"> Logon as <strong> <?php echo isset($_SESSION['user']); ?> </strong></label>
+                        <label id="m_oTbLogin" style="color: #ffffff"> Logon as <strong> 
+                        <?php 
+                        echo $_SESSION['user']; 
+                        ?> </strong></label>
                     </div>
                     <div class="loginDisplay">
                         LOGO HERE

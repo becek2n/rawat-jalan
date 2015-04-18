@@ -57,8 +57,6 @@ function validateform()
 
 function deleteconfirm(element)
 {
-	//$("div#delete_confirm_modal").modal("show");
-	//return false;
 	var question = 'Do you want to delete data ?';
 	if (confirm(question))
 	{

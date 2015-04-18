@@ -48,14 +48,14 @@
 			<tr>
 				<td colspan="3" align="center">
 					<label id="m_oLblMsgChild" style="color: red"></label>
-					<input type="hidden" id="m_oHfField" value="<?php echo isset($_SESSION['user']); ?>"></input>
+					<input type="hidden" id="m_oHfField" value="<?php echo $_SESSION['user']; ?>"></input>
 				</td>
 			</tr>
 		</table>
 	</div>
 	<div class="modal-footer">
 		<input type="hidden" id="user_id" value="" />
-		<button class="btn btn-primary delete" id="m_oBtnSave">Save</button>
+		<button class="btn btn-primary save" id="m_oBtnSave">Save</button>
 		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 	</div>
 </div>

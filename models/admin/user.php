@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 include_once('group.php');
 class user extends group
 {

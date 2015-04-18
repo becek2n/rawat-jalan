@@ -2,8 +2,9 @@ var currentPage;
 $(document).ready(function(){
 	getdata(1);
 	$(document).on('click', 'button#m_oBtnNew', function(){ adddata();});	
-	$(document).on('click', 'a.delete_confirm', function() { deleteConfirmation(this); });
-	$(document).on('click', 'button.delete', function(){ Add(); });
+	$(document).on("click", "a.delete_confirm", function(){ deleteConfirmation(this); });
+	$(document).on('click', 'button.save', function(){ Add(); });
+	$(document).on('click', 'button.delete', function(){ deletePoli(); });
 	$(document).on('click', 'button#m_oBtnNo', function(){ getdata(currentPage); })
 	$(document).on('change', 'select#m_oDdlPageSize', function(){ getdata(currentPage); })
 	$('#divcontent').on('click','.page-numbers',function(){ 
@@ -21,7 +22,7 @@ function adddata() {
 
 function deleteConfirmation(othis) {	
 	$("div#delete_confirm_modal").modal("show");
-	$("#delete_confirm_modal input#id").val($(othis).attr('idpoli'));
+	$("#delete_confirm_modal input#m_oHfId").val($(othis).attr('idpoli'));
 }
 
 function getdata(iPage){
@@ -68,36 +69,21 @@ function Add()
 			action: 'add',
 			datajson: poliJson
 		},
-		function(textStatus) {
-			if (textStatus == 'success')
-			{
-				alert('Data successfully save');
-			}
-			else
-			{
-				alert(textStatus);
-			}
+		function(data, textStatus) {
+				alert(data);
+				getdata(currentPage);
 		}, 
 		"json"		
 	);
 }
 
-function deleteUser(element) {	
+function deletePoli() {	
 	
 	var User = new Object();
-	User.id = $("#delete_confirm_modal input#user_id").val();
+	User.id = $("#delete_confirm_modal input#m_oHfId").val();
 	
 	var userJson = JSON.stringify(User);
 	
-	$.post('controller/user.php',
-		{
-			action: 'delete_user',
-			user: userJson
-		},
-		function(data, textStatus) {
-			getUserList(element);
-			$("#delete_confirm_modal").modal("hide");
-		}, 
-		"json"		
-	);	
+	
 }
+

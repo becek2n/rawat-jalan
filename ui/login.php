@@ -41,15 +41,19 @@
                                 	<?php 
                                 		include_once('/models/admin/user.php');
 										$oUser = new user();
-										if ($_POST['m_oBtnLogin'] == 'Login')
+										if (isset($_POST['m_oBtnLogin']))
 										{
-											$oUser->_setUserName(trim($_POST['m_oTbUserName']));
-											$oUser->_setPassword(trim($_POST['m_oTbPassword']));
-											print $oUser->Login();
-											//$oUser = null;
+											if ($_POST['m_oBtnLogin'] == 'Login')
+											{
+												$oUser->_setUserName(trim($_POST['m_oTbUserName']));
+												$oUser->_setPassword(trim($_POST['m_oTbPassword']));
+												print $oUser->Login();
+												//$oUser = null;
+											}
+											echo $oUser->_getMsgErr();
+	                                		$oUser = null;	
 										}
-										echo $oUser->_getMsgErr();
-                                		$oUser = null;
+										
                                 		
                                 	?>
                                 </label>

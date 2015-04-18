@@ -6,10 +6,17 @@ class Poli
 	private $PoliName;
 	private $User;
 	private $MsgErr;
+	private $DTNow;
+	
+	public function _getDTNow()
+	{
+		$dt = new DateTime();
+		$this->IDPoli = $dt->date;
+	}
 	
 	public function _getIDPoli()
 	{
-		$this->IDPoli;
+		return $this->IDPoli;
 	}
 	
 	public function _setIDPoli($iID)
@@ -19,7 +26,7 @@ class Poli
 	
 	public function _getNamaPoli()
 	{
-		$this->PoliName;
+		return $this->PoliName;
 	}
 	
 	public function _setNamaPoli($sNamaPoli)
@@ -29,7 +36,7 @@ class Poli
 	
 	public function _getUser()
 	{
-		$this->User;
+		return $this->User;
 	}
 	
 	public function _setUser($sUser)
@@ -39,7 +46,7 @@ class Poli
 	
 	public function _getMsgErr()
 	{
-		$this->MsgErr;
+		return $this->MsgErr;
 	}
 	
 	public function _setMsgErr($sMsgErr)
@@ -90,16 +97,20 @@ class Poli
 			$data->execute();
 
 			$str ='<table style="margin: auto; width: 80%; height: auto;" width="600" cellpadding="5"  width="600" cellpadding="5" class="table table-hover table-bordered"><thead><tr><th scope="col">ID</th><th scope="col">Poli Name</th><th scope="col">Action</th></tr></thead><tbody>';
-			if($data->rowCount()>0){
-				while ($row = $data->fetch(PDO::FETCH_ASSOC)){
+			if($data->rowCount()>0)
+			{
+				while ($row = $data->fetch(PDO::FETCH_ASSOC))
+				{
 			  
-			  $str.="<tr><td class='idpoli' >".$row['idpoli']."</td><td class='namapoli'>".$row['namapoli'];
-			  $str.='<td><a href="javascript:void(0);" idpoli="'.$row['idpoli'].'" class="delete_confirm btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
-			  $str.='</tr>';
-			}
+				  $str.="<tr><td class='idpoli' >".$row['idpoli']."</td><td class='namapoli'>".$row['namapoli'];
+				  $str.='<td><a href="javascript:void(0);" idpoli="'.$row['idpoli'].'" class="delete_confirm btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+				  $str.='</tr>';
+				}
 
-			}else{
-			$str .= "<tr><td colspan='3' align='center'>No Data Available</td></tr>";
+			}
+			else
+			{
+				$str .= "<tr><td colspan='3' align='center'>No Data Available</td></tr>";
 			}
 		   
 		   	$str .='</tbody></table>';
@@ -118,28 +129,81 @@ class Poli
 	
 	public function Add()
 	{
+
 		try
 		{
 			include_once('../../db/dbconnection.php');
 			$oConn = new dbconnection();
 			$this->oService = $oConn->opendb();
+			//check
+			//if poli name is already exists then exit process
+			$sqlcheck = 'select * from refpoli where namapoli = ?';
+			$executecheck = $this->oService->prepare($sqlcheck);
+			$executecheck->execute(array($this->_getNamaPoli()));
+			$resultcheck = $executecheck->rowCount();
 			
-			$sql = 'insert into refpoli (namapoli, datecreate, createby ) values( ?, ?)';
-
-			//parameter values stored in array
-			$param = array(
-				$this->PoliName,
-				time,
-				$this->User
-			);
-			$execute = $this->oService->prepare($sql);
-			$execute->execute($param);
-			return json_encode(1);
+			if ($resultcheck == 0)
+			{
+				//insert 
+				$sql = 'insert into refpoli (namapoli, datecreate, createby ) values(?, ?, ?)';
+				
+				//parameter values stored in array
+				$param = array(
+					$this->PoliName,
+					'',
+					$this->User
+				);
+				$execute = $this->oService->prepare($sql);
+				$execute->execute($param);
+				
+				include_once('../../global/audittrial.php');
+				$oAudit = new AuditTrail($this->oService);
+				$oAudit->_setTableName('Poli');
+				$oAudit->_setAction('Add');
+				
+				$objField = 'Nama Poli : '.$this->_getNamaPoli() . ' | ';
+				$objField .= 'Date Create : '. ' | ';
+				$objField .= 'Create By : '.$this->_getUser() . ' | ';
+				
+				$oAudit->_setObjectField($objField);
+				$oAudit->_setUser($this->_getUser());
+				$oAudit->Add();
+				$oConn = null;
+				$this->oService = null;
+				return json_encode($oAudit->_getMsgErr());
+			}
+			else
+			{
+				$this->oService = null;
+				return json_encode('Poli name already exists ');
+			}
+			
 		} 
 		catch (Exception $ex) 
 		{
 			return json_encode($ex->getMessage());
 		}
+		return json_encode(1);
 	}
+	
+	public function DeleteById()
+	{
+		include_once('/db/dbconnection.php');
+		$oConn = new dbconnection();
+		$this->oService = $oConn->opendb();
+		
+		try
+		{
+			$sql = 'delete from refuser where iduser = ?';
+			$param = array($this->_getIDUser());
+			$execute = $this->oService->prepare($sql);
+			return $execute->execute($param);
+		}
+		catch(Exception $ex)
+		{
+			$this->_setMsgErr($ex);
+		}
+	}
+	
 }
 ?>
