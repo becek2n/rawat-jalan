@@ -10,6 +10,7 @@
 		case'group':include"ui/forms/admin/group.php";break;
 		case'poli':include"ui/forms/master/poli.php";break;
 		case'user':include"ui/forms/admin/user.php";break;
+		case'dokter':include"ui/forms/master/dokter.php";break;
 		case 'logout' :
 			$_SESSION['user'] = '';
 			session_destroy();

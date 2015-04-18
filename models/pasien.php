@@ -1,19 +1,22 @@
 <?php
-include('../db/dbconnection.php');
-include('../global/paging.php');
+
 class Pasien {
 	
 	
 	private $dbh;
 	
 	public function __construct()	{		
-		$obj = new dbconnection();
-		$this->dbh = $obj->opendb();
-		//$this->dbh = new PDO("mysql:host=".$host.";dbname=".$db,$user,$pass);		
+		
+		
 		
 	}
 	
 	function showData($data,$limit,$adjacent){
+		include('../db/dbconnection.php');
+		include('../global/paging.php');
+		$obj = new dbconnection();
+		$this->dbh = $obj->opendb();
+		
 		$page = $data['page'];
 		if($page==1){
 			$start = 0;  
@@ -76,7 +79,36 @@ class Pasien {
 		$sth = null;
 	}
 	
+	public function bindDroppoli(){
+		require_once('/db/dbconnection.php');
+		
+		$objcon = new dbconnection();
+		$this->dbh = $objcon->opendb();
+		try{
+			
+		  	$sqlpoli = "select * from refpoli order by idpoli asc";  
+		  	$execpoli = $this->dbh->prepare($sqlpoli);
+		  	$execpoli->execute();
+		  	$html = '<select name="m_oDdlPoli" id="m_oDdlPoli">';
+		  	while($row = $execpoli->fetch(PDO::FETCH_ASSOC)){
+				$html .= '<option value="'.$row['idpoli'].'">'.$row['namapoli'];	
+			}
+			$html .= '</select>';
+			$objcon  = null;
+			$this->dbh = null;
+			echo $html;
+		} catch (Exception $ex) {
+			echo 'srj.models.pasien.bindpoli : '.$ex;
+		}
+		
+	}
+	
 	public function bindpoli(){
+		include('../db/dbconnection.php');
+		include('../global/paging.php');
+		$obj = new dbconnection();
+		$this->dbh = $obj->opendb();
+		
 		try{
 		  	$sqlpoli = "select * from refpoli order by idpoli asc";  
 		  	$execpoli = $this->dbh->prepare($sqlpoli);
@@ -117,6 +149,11 @@ class Pasien {
 		$this->dbh = null;
 	}
 	public function getdata(){
+		include('../db/dbconnection.php');
+		include('../global/paging.php');
+		$obj = new dbconnection();
+		$this->dbh = $obj->opendb();
+		
 		try{
 			
 			$sth = $this->dbh->prepare("SELECT * FROM refpasien");
@@ -130,6 +167,10 @@ class Pasien {
 	}
 	public function getdataajax($pageindex, $pagesize){
 		try{
+		include('../db/dbconnection.php');
+		include('../global/paging.php');
+		$obj = new dbconnection();
+		$this->dbh = $obj->opendb();	
 			
 			$sth = $this->dbh->prepare('SELECT SQL_CALC_FOUND_ROWS * FROM refpasien LIMIT '.$pageindex.','.$pagesize);
 			$sth->execute();
@@ -161,6 +202,11 @@ class Pasien {
 	}
 	
 	public function getdatapager($pageindex, $pagesize){
+		include('../db/dbconnection.php');
+		include('../global/paging.php');
+		$obj = new dbconnection();
+		$this->dbh = $obj->opendb();
+		
 		try{
 			$sth = $this->dbh->prepare("SELECT SQL_CALC_FOUND_ROWS *, count(*) as rowcount FROM refpasien LIMIT ".$pageindex.",".$pagesize);
 			$sth->execute();

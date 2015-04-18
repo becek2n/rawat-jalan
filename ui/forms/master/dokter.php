@@ -1,7 +1,7 @@
-<script src="ui/js/application/poli.js"></script>
+<script src="ui/js/application/dokter.js"></script>
 <div class="page-header">
     <h3>
-        Data Poli
+        Data Dokter
     </h3>
 </div>
 <table style="margin: auto; width: 80%; height: auto;">
@@ -31,14 +31,29 @@
 <!-- modal dialog -->
 <div id="adddata" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">		
-		<h3 id="myModalLabel">Add Poli</h3>
+		<h3 id="myModalLabel">Add Dokter</h3>
 	</div>
 	
 	<div class="modal-body">
 		<table>
+        	<tr>
+				 	<td>
+				 		Poli
+				 	</td>
+				 	<td></td>
+				 	<td>
+				 		
+				 		<?php 
+				 			include('/models/pasien.php');
+				 			$oPasien = new Pasien();
+							echo $oPasien->bindDroppoli();
+				 		?>
+				 		
+				 	</td>
+			 	</tr>
 			<tr>
 				<td>
-					Nama Poli
+					Nama Dokter
 				</td>
 				<td></td>
 				<td>
