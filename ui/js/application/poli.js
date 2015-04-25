@@ -79,11 +79,22 @@ function Add()
 
 function deletePoli() {	
 	
-	var User = new Object();
-	User.id = $("#delete_confirm_modal input#m_oHfId").val();
+	var Poli = new Object();
+	Poli.Id = $("#delete_confirm_modal input#m_oHfId").val();
+	Poli.User = $('input#m_oHfField').val();
+	var poliJson = JSON.stringify(Poli);
 	
-	var userJson = JSON.stringify(User);
-	
-	
+	$.post('controller/master/policontroller.php',
+		{
+			action: 'delete',
+			datajson: poliJson
+		},
+		function(data, textStatus) {
+				alert(data);
+				getdata(currentPage);
+				$("div#delete_confirm_modal").modal("hide");
+		}, 
+		"json"		
+	);
 }
 

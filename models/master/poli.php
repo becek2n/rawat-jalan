@@ -168,8 +168,11 @@ class Poli
 				$oAudit->_setObjectField($objField);
 				$oAudit->_setUser($this->_getUser());
 				$oAudit->Add();
+				
 				$oConn = null;
 				$this->oService = null;
+				$oAudit = null;
+				
 				return json_encode($oAudit->_getMsgErr());
 			}
 			else
@@ -188,20 +191,40 @@ class Poli
 	
 	public function DeleteById()
 	{
-		include_once('/db/dbconnection.php');
+		include_once('../../db/dbconnection.php');
 		$oConn = new dbconnection();
 		$this->oService = $oConn->opendb();
 		
 		try
 		{
-			$sql = 'delete from refuser where iduser = ?';
-			$param = array($this->_getIDUser());
+			$sql = 'delete from refpoli where idpoli = ?';
+			$param = array($this->_getIDPoli());
 			$execute = $this->oService->prepare($sql);
-			return $execute->execute($param);
+			$execute->execute($param);
+			
+			//insert to audit trail
+			include_once('../../global/audittrial.php');
+			$oAudit = new AuditTrail($this->oService);
+			$oAudit->_setTableName('Poli');
+			$oAudit->_setAction('Delete');
+			
+			$objField = 'ID Poli : '.$this->_getNamaPoli() . ' | ';
+			$objField .= 'Date : '. ' | ';
+			$objField .= 'Delete By : '.$this->_getUser() . ' | ';
+			
+			$oAudit->_setObjectField($objField);
+			$oAudit->_setUser($this->_getUser());
+			$oAudit->Add();
+			
+			$oConn = null;
+			$this->oService = null;
+			$oAudit = null;
+			return json_encode('Data successfully delete');
 		}
 		catch(Exception $ex)
 		{
-			$this->_setMsgErr($ex);
+			$this->_setMsgErr($ex->getMessage());
+			return json_encode('Error in models.poli.deletebyid : ' . $ex->getMessage());
 		}
 	}
 	

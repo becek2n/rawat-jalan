@@ -71,21 +71,29 @@ class group{
 		$objconn= new dbconnection();
 		$this->oService = $objconn->opendb();
 		try{
-			foreach($idgroup as $rows){
+			$sqlcheck = "delete from refrole where idgroup =".$datagroup['id'];
+			$data = $this->oService->prepare($sqlcheck);
+			if ($data->execute())
+			{
+
+				foreach($idgroup as $rows){
 				//check table role, if result null then insert to table else if result grather than 0 next looping
-				$sqlcheck = 'select * from refrole where idgroup ='. $datagroup['id'].' and idmenu = '.$rows;
-				$data = $this->oService->prepare($sqlcheck);
-				$data->execute();
-				$hasil = $data->rowCount();
-				if ($data->rowCount() == 0){
-					$sth = $this->oService->prepare("insert into refrole (idgroup, idmenu, datecreate, createby) VALUES (?, ?, ?, ?)");
-					$sth->execute(array($datagroup['id'], $rows, time(), $datagroup['user']));
+				//$sqlcheck = 'select * from refrole where idgroup ='. $datagroup['id'].' and idmenu = '.$rows;
+				
+				//$hasil = $data->rowCount();
+					//if ($data->rowCount() == 0){
+						$sth = $this->oService->prepare("insert into refrole (idgroup, idmenu, datecreate, createby) VALUES (?, ?, ?, ?)");
+						$sth->execute(array($datagroup['id'], $rows, time(), $datagroup['user']));
+					//}
 				}
 			}
-		$objconn = null;
-		$this->oService = null;
-		return json_encode('Data successfully save');
-		} catch (Exception $ex) {
+			$objconn = null;
+			$this->oService = null;
+			return json_encode('Data successfully save');
+			
+		} 
+		catch (Exception $ex) 
+		{
 			echo 'srj.models.group.save : ' . $ex;	
 		}
 	}

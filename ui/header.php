@@ -161,7 +161,13 @@ background: #00b4cc;
 						if(isset($_SESSION['user']) !=''){
 							include('/models/admin/menu.php');
 							$oMenu = new menu();
-							$oMenu->getmenu(0,1, isset($_SESSION['idgroup']));
+							$idGroup =0;
+							if (isset($_SESSION['idgroup']))
+							{
+								$idGroup = $_SESSION['idgroup'];
+							}
+							
+							$oMenu->getmenu(0,1, $idGroup);
 							$oMenu = NULL;
 						}							
 					?>

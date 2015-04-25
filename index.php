@@ -6,7 +6,7 @@
 <?php //include("ui/forms/master/pasien.php"); 
 	$page=(isset($_GET['page']))?$_GET['page']:"";
 		switch($page){
-		case'pasien':include"ui/forms/master/pasien.php";break;
+		case'pasien':include"ui/forms/data/pasien.php";break;
 		case'group':include"ui/forms/admin/group.php";break;
 		case'poli':include"ui/forms/master/poli.php";break;
 		case'user':include"ui/forms/admin/user.php";break;

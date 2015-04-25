@@ -308,23 +308,52 @@ class user extends group
 	
 	public function Add()
 	{
-		include_once('/db/dbconnection.php');
-		$oConn = new dbconnection();
-		$this->oService = $oConn->opendb();
-		
-		$sql = 'insert into refuser (idgroup, username, fullname, password, isactive) values(?, ?, ?, ?, ?)';
-		
-		
-		//parameter values stored in array
-		$param = array(
-			$this->_getGroupID(),
-			$this->_getUserName(),
-			$this->_getFullName(),
-			$this->_getPassword(),
-			1
-		);
-		$execute = $this->oService->prepare($sql);
-		return $execute->execute($param);
+		try
+		{
+			include_once('/db/dbconnection.php');
+			$oConn = new dbconnection();
+			$this->oService = $oConn->opendb();
+			
+			$sql = 'insert into refuser (idgroup, username, fullname, password, isactive) values(?, ?, ?, ?, ?)';
+			
+			
+			//parameter values stored in array
+			$param = array(
+				$this->_getGroupID(),
+				$this->_getUserName(),
+				$this->_getFullName(),
+				$this->_getPassword(),
+				1
+			);
+			$execute = $this->oService->prepare($sql);
+			$execute->execute($param);
+			
+			include_once('../../global/audittrial.php');
+			$oAudit = new AuditTrail($this->oService);
+			$oAudit->_setTableName('User');
+			$oAudit->_setAction('Add');
+			
+			$objField = 'Group ID : '.$this->_getGroupID() . ' | ';
+			$objField .= 'User Name : '.$this->_getUserName() . ' | ';
+			$objField .= 'Full Name : '.$this->_getFullName() . ' | ';
+			$objField .= 'Date Create : '. ' | ';
+			$objField .= 'Create By : '.$this->_getUser();
+			
+			$oAudit->_setObjectField($objField);
+			$oAudit->_setUser($this->_getUser());
+			$oAudit->Add();
+			
+			$oConn = null;
+			$this->oService = null;
+			$oAudit = null;
+				
+			return $this->_setMsgErr('Data successfully save');
+		}
+		catch(Exception $ex)
+		{
+			$this->_setMsgErr($ex->getMessage());
+			return 'Error in models.user.add : ' . $ex->getMessage();
+		}
 	}
 	
 	public function DeleteById()

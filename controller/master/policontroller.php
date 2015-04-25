@@ -11,10 +11,16 @@ switch ($_POST['action'])
 	
 	case 'add' :
 		$datajson = json_decode($_POST['datajson']);
-		$c = $datajson->PoliName;
 		$oPoli->_setNamaPoli($datajson->PoliName);
 		$oPoli->_setUser($datajson->User);
 		print $oPoli->Add();
+	break;
+	
+	case 'delete' :
+		$datajson = json_decode($_POST['datajson']);
+		$oPoli->_setIDPoli($datajson->Id);
+		$oPoli->_setUser($datajson->User);
+		print $oPoli->DeleteById();
 	break;
 }
 exit();

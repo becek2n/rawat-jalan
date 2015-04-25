@@ -1,8 +1,10 @@
 <?php
 
 class dbconnection{
+	
 	private $konek;
 	private static $db;
+	
 	public function opendb(){
 		try{
 		
