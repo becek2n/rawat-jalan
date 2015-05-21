@@ -150,7 +150,7 @@ class Poli
 				//parameter values stored in array
 				$param = array(
 					$this->PoliName,
-					'',
+					date("Y-m-d H:i:s"),
 					$this->User
 				);
 				$execute = $this->oService->prepare($sql);
@@ -162,8 +162,8 @@ class Poli
 				$oAudit->_setAction('Add');
 				
 				$objField = 'Nama Poli : '.$this->_getNamaPoli() . ' | ';
-				$objField .= 'Date Create : '. ' | ';
-				$objField .= 'Create By : '.$this->_getUser() . ' | ';
+				$objField .= 'Date Create : '. date("Y-m-d H:i:s") . ' | ';
+				$objField .= 'Create By : '.$this->_getUser() ;
 				
 				$oAudit->_setObjectField($objField);
 				$oAudit->_setUser($this->_getUser());
@@ -171,9 +171,10 @@ class Poli
 				
 				$oConn = null;
 				$this->oService = null;
+				return json_encode($oAudit->_getMsgErr());
 				$oAudit = null;
 				
-				return json_encode($oAudit->_getMsgErr());
+				
 			}
 			else
 			{
@@ -209,7 +210,7 @@ class Poli
 			$oAudit->_setAction('Delete');
 			
 			$objField = 'ID Poli : '.$this->_getNamaPoli() . ' | ';
-			$objField .= 'Date : '. ' | ';
+			$objField .= 'Date : '. date("Y-m-d H:i:s") . ' | ';
 			$objField .= 'Delete By : '.$this->_getUser() . ' | ';
 			
 			$oAudit->_setObjectField($objField);

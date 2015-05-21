@@ -21,7 +21,7 @@ switch ($_POST['action'])
 		$oDokter->_setNamaDokter($jsonDokter->NamaDokter);
 		$oDokter->_setUser($jsonDokter->User);
 		
-		print $oDokter->Add($objHariPraktek, $objJamDari, $objJamSampai);
+		//print $oDokter->Add($objHariPraktek, $objJamDari, $objJamSampai);
 	break;
 	
 	case 'delete' :

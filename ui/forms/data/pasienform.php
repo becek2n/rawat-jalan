@@ -1,24 +1,25 @@
 <script>
 	$(document).ready(function(){
-		$(document).on("click", "button#m_oBtnSave", function(){ alert("tes"); });
-		$(document).on("change", "select#m_oDdlPoli", function(){ getDokter(); });
-		$(document).on("click", "button#m_oBtnSelect", function(){ popupDayWorkDokter(); });
+		//date 
+	    $("#m_oTbTanggalLahir").datepicker({
+	        onSelect: function (value, ui) {
+	        	var today = new Date(),
+	            dob = new Date(value),
+	            yearNow = today.getFullYear(),
+	            age = yearNow - ui.selectedYear; //This is the update
+	            document.getElementById('m_oTbUsia').value = age;
+	        },
+	        yearRange: '1940:2050',
+	        changeMonth: true,
+	        changeYear: true
+	    });
 	})
-	
-	function selectDayWorkDokter()
-	{
-		try
-		{
-			
-		}
-		catch(ex)
-		{
-			alert(ex.message());
-		}
-	}
-	
-	
 </script>
+<?php 
+include('../../../models/data/checkup.php');
+$oData = new Checkup();
+?>
+
 <table style="margin-left:5%">
 	<tr>
 		<td align="center">
@@ -38,7 +39,11 @@
 						Registration Number
 					</td>
 					<td>
-						<input type="text" id="m_oTbRegNumber" name="m_oTbRegNumber" class="input-xlarge" readonly="true"/>
+						<input type="text" id="m_oTbRegNumber" name="m_oTbRegNumber" class="input-large"
+						value="<?php 
+							$oData->getRegNumber();
+						 	echo $oData->_getRegNumber();
+						?>" readonly="true"/>
 					</td>
 				</tr>
     	 		<tr>
@@ -46,7 +51,7 @@
     	 				Nama
     	 			</td>
     	 			<td>
-    	 				<input type="text" id="m_oTbNama" name="m_oTbNama" class="input-xlarge"/>
+    	 				<input type="text" id="m_oTbNama" name="m_oTbNama" class="input-xlarge" maxlength="50"/>
     	 			</td>
     	 		</tr>
     	 		<tr>
@@ -54,7 +59,7 @@
     	 				Tempat Lahir
     	 			</td>
     	 			<td>
-    	 				<input type="text" id="m_oTbTampatLahir" name="m_oTbTampatLahir" class="input-large"/>
+    	 				<input type="text" id="m_oTbTampatLahir" name="m_oTbTampatLahir" class="input-large" maxlength="30"/>
     	 			</td>
     	 		</tr>
     	 		<tr>
@@ -62,7 +67,7 @@
     	 				Tanggal Lahir
     	 			</td>
     	 			<td>
-    	 				<input type="text" id="m_oTbTanggalLahir" name="m_oTbTanggalLahir" class="input-large"/>
+    	 				<input type="text" id="m_oTbTanggalLahir" name="m_oTbTanggalLahir" class="input-small"/>
     	 			</td>
     	 		</tr>
 		    	 <tr>
@@ -70,7 +75,7 @@
 		    	 		Usia
 		    	 	</td>
 		    	 	<td>
-		    	 		<input type="text" id="m_oTbUsia" name="m_oTbUsia" class="input-small"/>
+		    	 		<input type="text" id="m_oTbUsia" name="m_oTbUsia" class="input-small" readonly="true" />
 		    	 	</td>
 		    	 </tr>
 		    	 <tr>
@@ -83,14 +88,23 @@
     	 			</td>
     	 		</tr>
     	 		<tr>
+		    	 	<td valign="top">
+		    	 		Alamat
+		    	 	</td>
+		    	 	<td>
+		    	 		<textarea id="m_oTbAlamat" name="m_oTbAlamat" class="input-xlarge"></textarea>
+		    	 		
+		    	 	</td>
+		    	 </tr>
+    	 		<tr>
     	 			<td valign="top">
     	 				Agama
     	 			</td>
     	 			<td>
     	 				<input type="radio" value="Islam" name="m_oRdAgama" id="m_oRdAgama"/>Islam <br>
-		 				<input type="radio" value="Kristen" name="m_oRdAgama"/>Kristen <br>
-		 				<input type="radio" value="Hindu" name="m_oRdAgama"/>Hindu <br>
-					 <input type="radio" value="Budha" name="m_oRdAgama"/>Budha <br>
+		 				<input type="radio" value="Kristen" name="m_oRdAgama" id="m_oRdAgama"/>Kristen <br>
+		 				<input type="radio" value="Hindu" name="m_oRdAgama" id="m_oRdAgama"/>Hindu <br>
+					 <input type="radio" value="Budha" name="m_oRdAgama" id="m_oRdAgama"/>Budha <br>
 			    	 </td>
 			    </tr>
 			    <tr>
@@ -113,7 +127,8 @@
 						Nomor Antrian
 					</td>
 					<td>
-						<input type="text" id="m_oTbNoAntri" name="m_oTbNoAntri" readonly="true"/>
+						<input type="text" id="m_oTbNoAntri" name="m_oTbNoAntri" 
+						value="" readonly="true"/>
 					</td>
 				</tr>
 			 	<tr>
@@ -123,8 +138,7 @@
 				 	<td>
 
 				 		<?php 
-				 			include('../../../models/data/registrationpasien.php');
-				 			$oData = new Pasien();
+				 			
 				 			$data = $oData->bindDropPoli('../../../db/dbconnection.php');
 				 		?>
 
@@ -154,6 +168,12 @@
 	</tr>
 	<tr>
 		<td colspan="3" align="center">
+			<label id="m_oLblMsg" style="color: red;"></label>
+			
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" align="center">
 			<div class="control-group">
 				<div class="">		
 					<button type="button" id="m_oBtnSave" class="btn btn-primary"><i class="icon-ok icon-white"></i> Save</button>
@@ -161,11 +181,7 @@
 			</div>
 		</td>
 	</tr>
-	<tr>
-		<td colspan="3" align="center">
-			<label id="m_oLblMsg" style="color: red;"></label>
-		</td>
-	</tr>
+	
 </table>
 
 <div id="divHariKerja" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

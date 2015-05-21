@@ -198,8 +198,8 @@ class Dokter
 			require_once("../../db/dbconnection.php");
 			$oConn =  new dbconnection();
 			$this->oService = $oConn->opendb();
-			
-			$sql = "select * from refdokterdetailpraktek where iddokter = " . $ID;
+			$IdDr = ($ID) ? $ID : 0;
+			$sql = "select * from refdokterdetailpraktek where iddokter = " . $IdDr;
 			$execute = $this->oService->prepare($sql);
 			$execute->execute();
 			
@@ -207,7 +207,7 @@ class Dokter
 			$html = '<table class="table table-hover table-bordered"><thead><tr><th>ID</th><th scope="col">Hari</th><th scope="col">Jam Pratek Dari</th><th scope="col">Jam Praktek Sampai</th></tr></thead><tbody>';
 			while($data = $execute->fetch(PDO::FETCH_ASSOC))
 			{
-				$html .= "<tr onclick=".'"' . "selectDay("."'".$data['iddetailprakter'] . "'". ", "."'".$data['hari'] ."'". ")" . '"'. " style='cursor:pointer'>";
+				$html .= "<tr onclick=".'"' . "selectDayWorkDokter("."'".$data['iddetailprakter'] . "'". ", "."'".$data['hari'] ."'". ")" . '"'. " style='cursor:pointer'>";
 				$html .= '<td idhari="' . $data['iddetailprakter'] . '">'. $data['iddetailprakter']. '</td>';
 				$html .= '<td idhari="' . $data['iddetailpraktek'] . '">'. $data['hari']. '</td>';
 				$html .= '<td idhari="' . $data['jamdari'] . '">'. $data['jamdari']. '</td>';
@@ -248,14 +248,12 @@ class Dokter
 			{
 				//insert intor table master dokter
 				$sql = 'insert into refdokter (idpoli,namadokter,datecreate,createby ) values( ?, ?, ?, ?)';
-				
-				$date = date("Y-m-d H:i:s");
 
 				//parameter values stored in array
 				$param = array(
 					$this->_getIDPoli(),
 					$this->_getNamaDokter(),
-					$date,
+					date("Y-m-d H:i:s"),
 					$this->_getUser()
 				);
 				$execute = $this->oService->prepare($sql);
@@ -301,6 +299,7 @@ class Dokter
 				$oConn = null;
 				$this->oService = null;
 				return json_encode($oAudit->_getMsgErr());
+				$oAudit = null;
 			}
 			else
 			{

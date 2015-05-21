@@ -43,7 +43,7 @@
 				<option value="agama">Religion</option>
 				<option value="status">Status</option>
 			</select>
-			<input type="text" id="m_oTbSearch" name="m_oTbSearch" placeholder="Search" onkeyup="searchdata()"/>
+			
 		</td>
 	</tr>
 </table>
@@ -53,6 +53,7 @@ Page Size
 	<option value="50">50</option>
 	<option value="100">100</option>
 </select>
+
 <div id="divcontent"></div>
 
 <script src="ui/js/pasien.js"></script>

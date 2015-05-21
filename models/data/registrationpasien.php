@@ -1,8 +1,7 @@
 <?php
-//require_once("checkup.php");
-class Pasien {
-	
-	
+
+class Pasien 
+{		
 	private $oService;
 	private $RegistreNumber;
 	private $Nama;
@@ -10,8 +9,11 @@ class Pasien {
 	private $TanggalLahir;
 	private $Usia;
 	private $JenisKelamin;
+	private $Alamat;
 	private $Agama;
 	private $Status;
+	private $User;
+	private $MsgErr;
 	
 	public function _getRegNumber()
 	{
@@ -73,6 +75,16 @@ class Pasien {
 		$this->JenisKelamin = $sJenisKelamin;
 	}
 	
+	public function _getAlamat()
+	{
+		return $this->Alamat;
+	}
+	
+	public function _setAlamat($sAlamat)
+	{
+		$this->Alamat = $sAlamat;
+	}
+	
 	public function _getAgama()
 	{
 		return $this->Agama;
@@ -91,6 +103,26 @@ class Pasien {
 	public function _setStatus($sStatus)
 	{
 		$this->Status = $sStatus;
+	}
+	
+	public function _getUser()
+	{
+		return $this->User;
+	}
+	
+	public function _setUser($sUser)
+	{
+		$this->User = $sUser;
+	}
+	
+	public function _getMsgErr()
+	{
+		return $this->MsgErr;
+	}
+	
+	public function _setMsgErr($sMsgErr)
+	{
+		$this->MsgErr = $sMsgErr;
 	}
 	
 	function showData($data,$limit,$adjacent){
@@ -132,7 +164,7 @@ class Pasien {
 		$data = $this->oService->prepare($sql);
 		$data->execute();
 
-		$str ='<table style="margin: auto; width: 100%; height: auto;" width="600" cellpadding="5" class="table table-hover table-bordered"><thead><tr><th scope="col">Name</th><th scope="col">Gender</th><th scope="col">Address</th><th scope="col">Religion</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead><tbody>';
+		$str ='<table style="margin: auto; width: 100%; height: auto;" width="600" cellpadding="5" class="table table-hover table-bordered"><thead><tr><th scope="col">ID Pasien</th><th scope="col">Name</th><th scope="col">Gender</th><th scope="col">Address</th><th scope="col">Religion</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead><tbody>';
 		if($data->rowCount()>0){
 			
 			if ($searchby == 'nama'){
@@ -143,9 +175,9 @@ class Pasien {
 			}
 		while ($row = $data->fetch(PDO::FETCH_ASSOC)){
 		  
-		  $str.="<tr><td class='nama'>".$row['nama']."</td><td class='jeniskelamin'>".$row['jeniskelamin']."</td><td class='alamat'>".$row['alamat']."</td>";
+		  $str.="<tr><td class='idpasien'>".$row['idpasien']."</td><td class='nama'>".$row['nama']."</td><td class='jeniskelamin'>".$row['jeniskelamin']."</td><td class='alamat'>".$row['alamat']."</td>";
 		  $str.="<td class='agama'>".$row['agama']."</td><td>".$row['status']."</td>";
-		  $str.='<td><a href="javascript:void(0);" user_id="'.$row['id'].'" class="delete_confirm btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
+		  $str.='<td><a href="javascript:void(0);" idpasien="'.$row['idpasien'].'" class="delete_confirm btn btn-danger"><i class="icon-remove icon-white"></i></a></td>';
 		  $str.='</tr>';
 		}
 
@@ -185,65 +217,43 @@ class Pasien {
 		}
 		
 	}
-	
-	public function bindDropDokter($idPoli)
-	{
-		try
-		{
-			include_once("../../db/dbconnection.php");
-			
-			$obj = new dbconnection();
-			$this->oService = $obj->opendb();
-			
-			$sqldokter = "select * from refdokter where idpoli = " . $idPoli . " order by namadokter";  
-		  	$execdokter = $this->oService->prepare($sqldokter);
-		  	$execdokter->execute();
-		  	return json_encode($execdokter->fetchAll());
-			
-			$objcon  = null;
-			$this->oService = null;			
-		}
-		catch(Exception $ex)
-		{
-			return json_encode("error in models.registrationpasien.binddropdokter : " . $ex->getMessage());
-		}
-	}
-	
+		
 	public function getRegNumber()
 	{
 		try
 		{
-			include('../../db/dbconnection.php');
+			include('../../../db/dbconnection.php');
 			$oConn = new dbconnection();
 			$this->oService = $oConn->opendb();
 			
 			$formatDate = date("Ymd");
 			
-			$sqlRegNumber = "SELECT max( RIGHT( kdregistre, 3 ) ) +1 AS result FROM  refpasien WHERE left(kdregistre, 8) = '" . $formatDate . "'";
-			
-			$dtSearch = date("Y-m-d");
-			$sqlCheckNumber = "select count(noantrian) + 1 result from datcheckup where left(datecreate, 10) = '" . $dtSearch "'";
-			
+			$sqlRegNumber = "SELECT max(substring( idpasien, 9 )) + 1 AS result FROM  refpasien WHERE left(idpasien, 8) = '" . $formatDate . "'";			
 			//execute sql registre number
 			$execRegNumber = $this->oService->prepare($sqlRegNumber);
 			$execRegNumber->execute();
 			$resultRegNumber = $execRegNumber->fetch(PDO::FETCH_ASSOC);
-		  	$RegNumber = $resultRegNumber['result'];
+			$RegNo = $formatDate;
+			if ($resultRegNumber['result'] == null)
+			{
+				$RegNo .= 1;
+			}
+			else
+			{
+				$RegNo .= $resultRegNumber['result'];
+			}
+		  	$this->_setRegNumber($RegNo);
 		  	
-		  	//execute sql checkup number
-		  	$execCheckNumber = $this->oService->prepare($sqlCheckNumber);
-			$execCheckNumber->execute();
-			$resultCheckNumber = $execCheckNumber->fetch(PDO::FETCH_ASSOC);
-		  	$this->_setRegNumber($resultCheckNumber['result']);
+		  	$oConn = null;
+		  	$this->oService =null;
 		  	
-		  	
-		  	
+		  	//return json_decode($datJson);
 		}
 		catch(Exception $ex)
 		{
-			
+			$this->_setMsgErr($ex->getMessage());
+			//return json_encode($ex->getMessage());
 		}
-		
 	}
 	
 	public function bindpoli(){
@@ -292,8 +302,5 @@ class Pasien {
 		}
 		$this->oService = null;
 	}
-	
-	
-	
 }
 ?>

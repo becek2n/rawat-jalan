@@ -148,7 +148,7 @@ background: #00b4cc;
                         ?> </strong></label>
                     </div>
                     <div class="loginDisplay">
-                        LOGO HERE
+                        RS AZRA - BOGOR
                     </div>
 
                 </div>

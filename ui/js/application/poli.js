@@ -7,6 +7,8 @@ $(document).ready(function(){
 	$(document).on('click', 'button.delete', function(){ deletePoli(); });
 	$(document).on('click', 'button#m_oBtnNo', function(){ getdata(currentPage); })
 	$(document).on('change', 'select#m_oDdlPageSize', function(){ getdata(currentPage); })
+	$(document).on('keyup', 'input#m_oTbSearch', function(){ getdata(1); })
+	
 	$('#divcontent').on('click','.page-numbers',function(){ 
 		$page = $(this).attr('href');
 		$pageind = $page.indexOf('page=');

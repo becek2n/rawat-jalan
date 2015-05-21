@@ -1,4 +1,6 @@
+<link href="ui/assets/jquery.ui/jquery-ui.css" rel="stylesheet" media="screen">
 
+<script src="ui/assets/jquery.ui/jquery-ui.js"></script>
 <div class="container">			
 <div class="navbar">
 	<div class="navbar-inner">    
@@ -15,31 +17,34 @@
 	<img src="ui/img/indicator.gif"/>
 </div>
 <div id="divSearch">
-	<table style="margin: auto; width: 80%; height: auto;">
+	<table style="margin: auto; width: 100%; height: auto;">
 		<tr>
 			<td>
+			Page Size
+				<select name="m_oDdlPageSize" id="m_oDdlPageSize" class="input-small">
+					<option value="10">10</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
 				Filter by : 
 				<select name="m_oDdlFilter" id="m_oDdlFilter">
+					<option value="idpasien">ID</option>
 					<option value="nama">Nama</option>
 					<option value="alamat">Alamat</option>
 					<option value="agama">Religion</option>
 					<option value="status">Status</option>
 				</select>
-				<input type="text" id="m_oTbSearch" name="m_oTbSearch" placeholder="Search" onkeyup="searchdata()"/>
+				<input type="text" id="m_oTbSearch" name="m_oTbSearch" placeholder="Search" />
+				<form method="post" action="ui/forms/report/pasien.php" target="_blank">
+					<button type="submit" class="btn btn-info">Cetak</button>
+				</form>
 			</td>
 		</tr>
 	</table>
-	Page Size
-	<select name="m_oDdlPageSize" id="m_oDdlPageSize" class="input-small" onchange="listdata()">
-		<option value="10">10</option>
-		<option value="50">50</option>
-		<option value="100">100</option>
-	</select>
 </div>
-
 <div id="divcontent"></div>
 <div id="divHariDokterPraktek"></div>
-
+<input type="hidden" id="m_oHfField" value="<?php echo $_SESSION['user']; ?>"></input>
 <script src="ui/js/application/registrationpasien.js"></script>
 
 </div>

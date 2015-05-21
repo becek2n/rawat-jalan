@@ -24,7 +24,7 @@
                                 "inputPassword">Password</label>
 
                                 <div class="controls">
-                                    <input type="text" id="m_oTbPassword" name="m_oTbPassword" maxlength="30" class="input-large" />
+                                    <input id="m_oTbPassword" name="m_oTbPassword" type="password" maxlength="30" class="input-large" />
                                 </div>
                             </div>
 

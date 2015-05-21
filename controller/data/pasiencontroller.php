@@ -1,9 +1,7 @@
 <?php
-//function __autoload($className){
-	include_once("../../models/data/registrationpasien.php");	
-//}
+include_once("../../models/data/checkup.php");	
 
-$users=new Pasien();
+$objCheckUp = new Checkup();
 
 if(!isset($_POST['action'])) {
 	print json_encode(0);
@@ -13,12 +11,17 @@ switch($_POST['action']) {
 
 	case 'getdata':
 		$pagesize = $_REQUEST['pagesize'];
-		print $users->showData($_REQUEST,$pagesize,$pagesize);
+		print $objCheckUp->showData($_REQUEST,$pagesize,$pagesize);
+	break;
+	
+	case 'getdatapayment':
+		$pagesize = $_REQUEST['pagesize'];
+		print $objCheckUp->getDataPemabayaran($_REQUEST,$pagesize,$pagesize);
 	break;
 	
 	case 'getdokter':
 		$idPoli = $_POST['data'];
-		print $users->bindDropDokter($idPoli);
+		print $objCheckUp->bindDropDokter($idPoli);
 	break;
 	
 	case 'getharipraktek':
@@ -31,10 +34,77 @@ switch($_POST['action']) {
 	
 	case 'getdatapager':
 		$pageindex = $_POST['pageindex'];
-		print $users->getdatapager($pageindex);		
+		print $objCheckUp->getdatapager($pageindex);		
 	break;
 	
+	case 'add':
+		$objJson = json_decode($_POST['dataJson']);
+		$objCheckUp->_setRegNumber($objJson->RegNumber);
+		$objCheckUp->_setNama($objJson->Nama);
+		$objCheckUp->_setTempatLahir($objJson->TempatLahir);
+		$objCheckUp->_setTanggalLahir($objJson->TanggalLahir);
+		$objCheckUp->_setUsia($objJson->Usia);
+		$objCheckUp->_setJenisKelamin($objJson->JenisKelamin);
+		$objCheckUp->_setAlamat($objJson->Alamat);
+		$objCheckUp->_setAgama($objJson->Agama);
+		$objCheckUp->_setStatus($objJson->Status);
+		$objCheckUp->_setNoAntrian($objJson->NoAntrian);
+		$objCheckUp->_setIdPoli($objJson->Poli);
+		$objCheckUp->_setIdDokter($objJson->Dokter);
+		$objCheckUp->_setIdHari($objJson->Hari);
+		$objCheckUp->_setFlag(0);
+		$objCheckUp->_setUser($objJson->User);
+		print $objCheckUp->SaveRegistre();
+	break;
 	
+	case 'getpaseienbyid' :
+		$IDPasien = $_POST['ID'];
+		$objCheckUp->_setRegNumber($IDPasien);
+		print $objCheckUp->GetPasienById();
+	break;
+	
+	case 'getpasien' :
+		$IDPasien = $_POST['ID'];
+		$objCheckUp->_setRegNumber($IDPasien);
+		print $objCheckUp->GetPasienPembayaran();
+	break;
+	
+	case 'addcheckup' :
+		$objJson = json_decode($_POST['dataJson']);
+		$objCheckUp->_setRegNumber($objJson->RegNumber);
+		$objCheckUp->_setNoAntrian($objJson->NoAntrian);
+		$objCheckUp->_setIdPoli($objJson->Poli);
+		$objCheckUp->_setIdDokter($objJson->Dokter);
+		$objCheckUp->_setIdHari($objJson->Hari);
+		$objCheckUp->_setFlag(0);
+		$objCheckUp->_setUser($objJson->User);
+		if ($objCheckUp->SaveCheckup() == false)
+		{
+			return json_encode(0);
+		}
+		else
+		{
+			return json_encode(1);
+		}
+	break;
+	
+	case 'delete' :
+		$jsonPasien = json_decode($_POST['dataJson']);
+		$objCheckUp->_setRegNumber($jsonPasien->ID);
+		$objCheckUp->_setUser($jsonPasien->User);
+		print $objCheckUp->DeleteById();
+	break;
+	
+	case 'payment' :
+		$jsonData = json_decode($_POST['dataJson']);
+		$objCheckUp->_setRegNumber($jsonData->RegNumber);
+		$objCheckUp->_setUser($jsonData->User);
+		$arrayTindakan = $jsonData->Tindakan;
+		$arrayHarga = $jsonData->Harga;
+		
+		print $objCheckUp->SavePembayaran($arrayTindakan, $arrayHarga);
+		
+	break;
 }
-
+//$objCheckUp = null;
 exit();

@@ -11,7 +11,7 @@ class menu{
 		$this->oService = $oconn->opendb();	
 		try{
 
-			$execute = $this->oService->prepare("SELECT a.idmenu, a.mnname, a.mnlink, Deriv1.Count FROM refmenu a  LEFT OUTER JOIN (SELECT parenid, COUNT(*) AS Count FROM refmenu GROUP BY parenid) Deriv1 ON a.idmenu = Deriv1.parenid inner join refrole r on r.idmenu = a.idmenu WHERE a.parenid=".$parent." and r.idgroup =".$IDGroup." order by a.idmenu asc");
+			$execute = $this->oService->prepare("SELECT a.idmenu, a.mnname, a.mnlink, Deriv1.Count FROM refmenu a  LEFT OUTER JOIN (SELECT parenid, COUNT(*) AS Count FROM refmenu GROUP BY parenid) Deriv1 ON a.idmenu = Deriv1.parenid inner join refrole r on r.idmenu = a.idmenu WHERE a.parenid=".$parent." and r.idgroup =".$IDGroup." order by a.idmenu, a.mnname asc");
 			$execute->execute();
 			
 			echo '<ul>';

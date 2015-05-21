@@ -2,7 +2,7 @@ var currentPage;
 var jumlah = 0;
 $(document).ready(function(){
 	getdata(1);
-	$(document).on('click', 'button#m_oBtnNew', function(){ adddata();});	
+	$(document).on('click', 'button#m_oBtnNew', function(){ showDialog();});	
 	$(document).on("click", "a.delete_confirm", function(){ deleteConfirmation(this); });
 	$(document).on('click', 'button#m_oBtnSave', function(){ Add(); });
 	$(document).on('click', 'button.delete', function(){ deleteDokter(); });
@@ -25,20 +25,18 @@ $(document).ready(function(){
             tr.remove();
             dataPraktek["haripraktek"] = "";
             dataPraktek["jampraktekdari"] = "";
-            dataPraktek["jamprakteksampai"] = "";
-            
+            dataPraktek["jamprakteksampai"] = ""; 
         });
-
-        
     });
 })
 
-function adddata() {	
+function showDialog() {	
 	$("div#adddata").modal("show");
 }
 
 function deleteConfirmation(othis) {	
 	$("div#delete_confirm_modal").modal("show");
+	var c = $(othis).attr('idpasien');
 	$("#delete_confirm_modal input#m_oHfId").val($(othis).attr('iddokter'));
 }
 
@@ -209,17 +207,13 @@ function errchild(msg)
 function detail(id)
 {
 	var did = 'd' + id;
-	if( document.getElementById(did).style.display == 'inline' )
+	if( document.getElementById(did).style.display == 'table-row' )
 	{
-		document.getElementById(did).style.display = 'none'; // Hide the details div
-		//document.getElementById(id).innerHTML = '<strong>+</strong>';  // Change the symbol to + 
+		document.getElementById(did).style.display = 'none'; // Hide the details div 
 
 	}
 	else 
 	{
-		//document.getElementById(did).style.display = 'inline';  // show the details
-		document.getElementById(did).style.display = 'inline';  // show the details
-		//document.getElementById(id).innerHTML = '<strong>-</strong>'; //Change the symbol to -
-
+		document.getElementById(did).style.display = 'table-row';  // show the details
 	}
 }

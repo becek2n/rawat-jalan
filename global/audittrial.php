@@ -83,7 +83,7 @@ class AuditTrail
 				$this->_getTableName(),
 				$this->_getAction(),
 				$this->_getObjectField(),
-				'',
+				date("Y-m-d H:i:s"),
 				$this->_getUser()
 			);
 			$execute = $this->oService->prepare($sql);

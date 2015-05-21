@@ -15,7 +15,7 @@
 <table style="margin: auto; width: 80%; height: auto;">
 	<tr>
 		<td>
-			<input type="text" id="m_oTbSearch" name="m_oTbSearch" placeholder="Search" onkeyup="getdata(1)" class="input-large"/>
+			<input type="text" id="m_oTbSearch" name="m_oTbSearch" placeholder="Search" class="input-large"/>
 		</td>
 		<td>
 			Page Size
